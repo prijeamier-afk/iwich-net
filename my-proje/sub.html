@@ -1,0 +1,62 @@
+<script>
+    // خواندن اطلاعات از آدرس مرورگر
+    const urlParams = new URLSearchParams(window.location.search);
+    const userName = urlParams.get('user') || 'کاربر گرامی';
+    const totalGB = parseFloat(urlParams.get('total') || '30');
+    const usedGB = parseFloat(urlParams.get('used') || '7.5');
+    const daysLeft = urlParams.get('days') || '25';
+    const userUuid = urlParams.get('uuid') || 'd3b07384-d113-4944-9c0c-a9686e680e9a';
+
+    document.getElementById('u-name').innerText = 'کاربر: ' + userName;
+    document.getElementById('u-usage').innerText = ${usedGB} / ${totalGB} GB;
+    document.getElementById('u-days').innerText = ${daysLeft} روز;
+
+    const percent = Math.min(100, Math.round((usedGB / totalGB) * 100));
+    document.getElementById('u-percent').innerText = percent + '٪';
+
+    // انیمیشن گیج
+    setTimeout(() => {
+      const circleCircumference = 2 * Math.PI * 70; // ~440
+      const offset = circleCircumference - (percent / 100) * circleCircumference;
+      document.getElementById('gauge-bar').style.strokeDashoffset = offset;
+    }, 200);
+
+    const host = window.location.hostname || "your-app.railway.app";
+    const vlessLink = vless://${userUuid}@${host}:443?path=%2Fws-stream&security=tls&encryption=none&type=ws#Iwich⚡${encodeURIComponent(userName)};
+
+    function copyConfig() {
+      navigator.clipboard.writeText(vlessLink);
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2000);
+    }
+
+    function openQR() {
+      const box = document.getElementById('qr-target');
+      box.innerHTML = '';
+      new QRCode(box, { text: vlessLink, width: 160, height: 160 });
+      document.getElementById('qr-modal').classList.add('active');
+    }
+    function closeQR() { document.getElementById('qr-modal').classList.remove('active'); }
+
+    // ذرات پس‌زمینه
+    const c = document.getElementById('canvas-bg');
+    const ctx = c.getContext('2d');
+    c.width = window.innerWidth; c.height = window.innerHeight;
+    let dots = [];
+    for(let i=0; i<30; i++) dots.push({x:Math.random()*c.width, y:Math.random()*c.height, vx:(Math.random()-0.5)*0.7, vy:(Math.random()-0.5)*0.7});
+    function loop() {
+      ctx.clearRect(0,0,c.width,c.height);
+      dots.forEach(d => {
+        d.x += d.vx; d.y += d.vy;
+        if(d.x<0||d.x>c.width) d.vx*=-1;
+        if(d.y<0||d.y>c.height) d.vy*=-1;
+        ctx.fillStyle='rgba(139,92,246,0.35)';
+        ctx.beginPath(); ctx.arc(d.x,d.y,2,0,Math.PI*2); ctx.fill();
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>
