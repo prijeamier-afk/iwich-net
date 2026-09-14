@@ -87,7 +87,7 @@ class PanelHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps({"status": "success"}).encode('utf-8'))
 
-if name == 'main':
+if __name__ == '__main__':
     init_db()
     print(f"Iwich Panel is running on port {PORT}...")
     server = HTTPServer(('0.0.0.0', PORT), PanelHandler)
