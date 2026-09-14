@@ -1,4 +1,4 @@
-FROM debian:bookworn-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 
