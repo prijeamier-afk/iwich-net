@@ -1,6 +1,6 @@
 #!/bin/sh
-PORT=${PORT:-8080}
-
+PORT=${PORT:-80}
+rm -f /etc/nginx/sites-enabled/*
 # تنظیم وب‌سرور برای تفکیک ترافیک پروکسی و پنل
 cat <<EOF > /etc/nginx/conf.d/default.conf
 server {
